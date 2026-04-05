@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>图片字幕生成器</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="page-header">
+        <h1>图片字幕生成器</h1>
+        <p>上传图片，输入多行字幕，生成底部切割感字幕条图片</p>
+      </header>
+
+      <main class="layout">
+        <section class="panel">
+          <div class="section-block">
+            <h2>上传图片</h2>
+            <label class="upload-box" for="imageInput">
+              <span class="upload-button">+ 选择图片</span>
+              <span class="upload-tip">支持 JPG、PNG、WEBP</span>
+              <span class="file-name" id="fileName">未选择图片</span>
+            </label>
+            <input id="imageInput" type="file" accept="image/png,image/jpeg,image/webp" hidden />
+          </div>
+
+          <div class="section-block">
+            <h2>字幕设置</h2>
+            <div class="form-grid">
+              <label class="field">
+                <span>字幕高度</span>
+                <div class="field-input">
+                  <input id="lineHeight" type="number" min="40" max="160" value="80" />
+                  <span>px</span>
+                </div>
+              </label>
+
+              <label class="field">
+                <span>字体大小</span>
+                <div class="field-input">
+                  <input id="fontSize" type="number" min="20" max="96" value="40" />
+                  <span>px</span>
+                </div>
+              </label>
+
+              <label class="field">
+                <span>字体颜色</span>
+                <div class="color-input">
+                  <input id="textColor" type="color" value="#ffffff" />
+                  <input id="textColorText" type="text" value="#FFFFFF" />
+                </div>
+              </label>
+
+              <label class="field">
+                <span>轮廓颜色</span>
+                <div class="color-input">
+                  <input id="strokeColor" type="color" value="#000000" />
+                  <input id="strokeColorText" type="text" value="#000000" />
+                </div>
+              </label>
+
+              <label class="field">
+                <span>背景颜色</span>
+                <div class="color-input">
+                  <input id="barColor" type="color" value="#000000" />
+                  <input id="barColorText" type="text" value="#000000" />
+                </div>
+              </label>
+
+              <label class="field">
+                <span>背景透明度</span>
+                <div class="field-input">
+                  <input id="barOpacity" type="number" min="0" max="100" value="55" />
+                  <span>%</span>
+                </div>
+              </label>
+
+              <label class="field">
+                <span>字体样式</span>
+                <select id="fontFamily">
+                  <option value="'Microsoft YaHei', 'PingFang SC', sans-serif">微软雅黑</option>
+                  <option value="'PingFang SC', 'Microsoft YaHei', sans-serif">苹方</option>
+                  <option value="'Noto Sans SC', 'Microsoft YaHei', sans-serif">思源黑体</option>
+                  <option value="Arial, sans-serif">Arial</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>字体粗细</span>
+                <select id="fontWeight">
+                  <option value="400">正常</option>
+                  <option value="500">中等</option>
+                  <option value="700">加粗</option>
+                  <option value="900">特粗</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <div class="section-block">
+            <h2>字幕内容</h2>
+            <textarea id="subtitleText" rows="7" placeholder="每一行是一条独立字幕&#10;这是 Manus 的相关照片&#10;也是一个历史性的时刻&#10;Manus 不一定会笑到最后&#10;但世界已经因此开始发生一些变化"></textarea>
+          </div>
+
+          <div class="action-row">
+            <button id="generateButton" class="primary-button" type="button" disabled>生成字幕图片</button>
+            <button id="saveButton" class="secondary-button" type="button" disabled>保存图片</button>
+          </div>
+
+          <p class="status-message" id="statusMessage">请先上传图片</p>
+        </section>
+
+        <section class="panel preview-panel">
+          <div class="preview-header">
+            <h2>预览</h2>
+            <span id="previewMeta">暂无图片</span>
+          </div>
+          <div class="preview-stage" id="previewStage">
+            <div class="empty-preview" id="emptyPreview">
+              <strong>等待图片上传</strong>
+              <span>上传后即可在这里实时查看字幕生成效果</span>
+            </div>
+            <canvas id="previewCanvas"></canvas>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
