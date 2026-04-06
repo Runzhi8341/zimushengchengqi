@@ -206,12 +206,20 @@ function drawPreview() {
   previewContext.drawImage(image, 0, 0, width, height);
 
   const effectiveLines = lines.slice(0, Math.max(1, Math.floor(height / settings.lineHeight)));
-  const maxVisibleHeight = effectiveLines.length * settings.lineHeight;
-  const startY = Math.max(0, height - maxVisibleHeight);
   const textMaxWidth = width - 48;
-  const splitGap = Math.max(2, Math.round(settings.lineHeight * 0.08));
-  const stripHeight = Math.max(18, settings.lineHeight - splitGap);
-  const stripOffset = Math.floor(splitGap / 2);
+  const layoutLineCount = Math.max(effectiveLines.length, 1);
+  const splitGap = Math.max(4, Math.round(settings.lineHeight * 0.08));
+  const reservedSlots = 4;
+  const preferredRegionHeight =
+    settings.lineHeight * reservedSlots +
+    splitGap * Math.max(reservedSlots - 1, 0) +
+    Math.round(settings.lineHeight * 0.35);
+  const subtitleRegionHeight = Math.min(Math.max(preferredRegionHeight, 96), Math.round(height * 0.62));
+  const startY = Math.max(0, height - subtitleRegionHeight);
+  const totalGapHeight = splitGap * Math.max(layoutLineCount - 1, 0);
+  const stripHeight = Math.max(18, Math.floor((subtitleRegionHeight - totalGapHeight) / layoutLineCount));
+  const occupiedHeight = stripHeight * layoutLineCount + totalGapHeight;
+  const topInset = Math.max(0, Math.floor((subtitleRegionHeight - occupiedHeight) / 2));
 
   previewContext.textAlign = "center";
   previewContext.textBaseline = "middle";
@@ -220,8 +228,7 @@ function drawPreview() {
   previewContext.lineJoin = "round";
 
   effectiveLines.forEach((line, index) => {
-    const currentY = startY + index * settings.lineHeight;
-    const stripY = currentY + stripOffset;
+    const stripY = startY + topInset + index * (stripHeight + splitGap);
 
     drawSubtitleStrip(stripY, stripHeight, width, settings);
 
